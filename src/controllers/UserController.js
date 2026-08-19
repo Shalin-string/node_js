@@ -1,5 +1,8 @@
-const getAllUsers = (req,res) =>{
-    res.json({message:"Get all users..."})
+const userModel = require("../modles/UserModle")
+
+const getAllUsers = async(req,res) =>{
+    const users = await userModel.find()
+    res.json({message:"Get all users...",data:users})
 }
 
 const getUserById = (req,res)=>{

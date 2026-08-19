@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+const getDBConnection = require("./src/utils/DBConnection")
+getDBConnection()
+
 const userRoutes = require("./src/routes/UserRoutes")
 app.use("/user",userRoutes)
 

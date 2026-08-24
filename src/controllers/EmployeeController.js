@@ -1,4 +1,5 @@
 const EmpModel = require("../modles/EmployeeModel")
+const UserModle = require("../modles/UserModle")
 
 const getAllEmp = async(req,res)=>{
     const emp = await EmpModel.find()
@@ -17,8 +18,19 @@ const searchemp = async(req,res) =>{
     
 }
 
+const createemp = async(req,res) =>{
+
+     try{
+    console.log("body = ",req.body);
+    const createemp = await EmpModel.insertOne(req.body)
+    res.json({message:"ok"})
+     }
+     catch(err){
+        res.json({err:err})
+    }
+}
 
 
 module.exports = {
-    getNamebyCom, getAllEmp
+    getNamebyCom, getAllEmp,createemp
 }

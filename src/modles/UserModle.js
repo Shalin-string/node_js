@@ -6,6 +6,16 @@ const UserModel = mongoose.Schema({
     },
     age:{
         type:Number
+    },
+    bloodgroup:{
+        type:String,
+        enum:["A+","A-","B+","B-","AB+","AB-","O+","O-"]
+    },
+    skills:[{
+        type:String
+    }],
+    address:{
+        type:Object
     }
 })
 

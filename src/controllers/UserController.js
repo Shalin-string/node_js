@@ -37,10 +37,15 @@ const searchUser2 = async(req,res)=>{
 }
 
 const createuser = async(req, res) =>{
+
+    try{
     console.log("req body : ",req.body);
     const createuser = await userModel.insertOne(req.body)
     res.json({message:"created user"})
-       
+    }
+    catch(err){
+        res.json({err:err})
+    }
 }
 
 

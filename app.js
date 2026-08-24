@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json())
+
 const getDBConnection = require("./src/utils/DBConnection")
 getDBConnection()
 

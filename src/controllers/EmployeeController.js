@@ -17,6 +17,8 @@ const searchemp = async(req,res) =>{
     
 }
 
+
+
 module.exports = {
     getNamebyCom, getAllEmp
 }

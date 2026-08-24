@@ -11,6 +11,12 @@ const getNamebyCom = (req,res) =>{
     
 }
 
+const searchemp = async(req,res) =>{
+    const id = req.params.id
+
+    
+}
+
 module.exports = {
     getNamebyCom, getAllEmp
 }

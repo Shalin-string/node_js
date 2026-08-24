@@ -11,8 +11,33 @@ const getUserById = (req,res)=>{
     res.json({message:"get user by id called...",id:req.params.id})
 }
 
+const searchByid = async(req,res)=>{
+    const id = req.params.id
+
+    const founduser = await userModel.findById(id)
+    if(founduser){
+        res.json({
+            message:"User found",
+            data:founduser
+        })
+    }
+    else{
+        res.json({
+            message:"User not found"
+        })
+
+    }
+}
+
+const searchUser2 = async(req,res)=>{
+
+    const data = req.query; //{josn object}
+    console.log(data)
+    res.json({data:data})
+}
+
 
 
 module.exports ={
-    getAllUsers, getUserById
+    getAllUsers, getUserById,searchByid, searchUser2
 }

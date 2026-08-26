@@ -12,6 +12,12 @@ app.use("/user",userRoutes)
 const EmployeesRoutes = require("./src/routes/EmployeeRoutes")
 app.use("/employee",EmployeesRoutes)
 
+const RoleRoutes = require("./src/routes/RoleRoutes")
+app.use("/role",RoleRoutes)
+
+const catagoryRoute = require("./src/routes/RoleRoutes")
+app.use("/catagory",catagoryRoute)
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

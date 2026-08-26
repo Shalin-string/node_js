@@ -1,5 +1,5 @@
 const EmpModel = require("../modles/EmployeeModel")
-const UserModle = require("../modles/UserModle")
+
 
 const getAllEmp = async(req,res)=>{
     const emp = await EmpModel.find()

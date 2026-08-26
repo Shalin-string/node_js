@@ -1,9 +1,8 @@
-const CatagoryModel = require("../modles/CatagoryModel")
 const categoryModel = require("../modles/CatagoryModel")
 
 const createcatagory = async(req,res) =>{
     try{
-        const savedCatagory  = await CatagoryModel.create(req.body) 
+        const savedCatagory  = await categoryModel.create(req.body) 
         res.json({
             message:"catagory saved !!",
             data:savedCatagory
@@ -43,5 +42,5 @@ const getAllCatagories = async(req,res) =>{
 }
 
 module.exports={
-    createCategory,getAllCategories
+    createcatagory,getAllCatagories
 }

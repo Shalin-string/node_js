@@ -15,7 +15,7 @@ app.use("/employee",EmployeesRoutes)
 const RoleRoutes = require("./src/routes/RoleRoutes")
 app.use("/role",RoleRoutes)
 
-const catagoryRoute = require("./src/routes/RoleRoutes")
+const catagoryRoute = require("./src/routes/CatagoryRoutes")
 app.use("/catagory",catagoryRoute)
 
 const productRoutes = require("./src/routes/ProductRoutes")

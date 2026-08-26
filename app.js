@@ -18,6 +18,9 @@ app.use("/role",RoleRoutes)
 const catagoryRoute = require("./src/routes/RoleRoutes")
 app.use("/catagory",catagoryRoute)
 
+const productRoutes = require("./src/routes/ProductRoutes")
+app.use("/product",productRoutes)
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

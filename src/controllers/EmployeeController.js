@@ -31,6 +31,7 @@ const createemp = async(req,res) =>{
 }
 
 
+
 module.exports = {
     getNamebyCom, getAllEmp,createemp
 }

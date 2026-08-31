@@ -99,7 +99,64 @@ const updateuser = async(req,res) =>{
     }
 }
 
+const updatebyage = async(req,res) => {
+    try{
+        const age = req.params.age;
+        const updatewithage  =  await userModel.updateMany({age:{$gte:age}},req.body,{new:true})
+        if(updatewithage){
+            res.status(200).json({
+        message: "user updated",
+        data: updatewithage,
+            });
+        }else{
+            res.status(404).json({
+                message:"user not found to update"
+            })
+        }
+    }
+    catch(err){
+        res.status(500).json({
+            message:"error while updating by age",
+            err:err
+        })
+    }
+}
+
+const updateusingid = async(req,res) => {
+
+    try{
+
+        const data =req.query;
+        const id = req.query.id;
+
+        const updateusurl = await userModel.findByIdAndUpdate(id, req.query,{new:true})
+        if(req.query.id){
+        
+            if(updateusurl){
+                res.status(200).json({
+            message: "user updated",
+            data: updateusurl,
+                });
+            }else{
+                res.status(404).json({
+                    message:"user not found to update"
+                })
+            }
+        }else{
+            res.status(404).json({
+                message:"id not found to update"
+            })
+        }
+    }
+    catch(err){
+        res.status(500).json({
+            message:"error while updating using url data",
+            err:err
+        })
+    }
+}
 
 module.exports ={
-    getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser
+    getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser, updatebyage,
+    updateusingid
 }

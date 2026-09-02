@@ -1,4 +1,5 @@
 const userModel = require("../modles/UserModle")
+const mailSend = require("../utils/MailUtils")
 
 const getAllUsers = async(req,res) =>{
     const users = await userModel.find()

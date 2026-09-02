@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 app.use(express.json())
+require("dotenv").config()
 
 const getDBConnection = require("./src/utils/DBConnection")
 getDBConnection()
@@ -22,7 +23,7 @@ const productRoutes = require("./src/routes/ProductRoutes")
 app.use("/product",productRoutes)
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Port stated on port ${PORT}`);
 });

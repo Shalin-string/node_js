@@ -19,6 +19,10 @@ const productModel = mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: "categories",
     },
+     stockStatus:{
+        type:String,
+        enum:["available","low","out of stock"]
+    },
   },
   { timestamps: true },
 );

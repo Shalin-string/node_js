@@ -37,17 +37,47 @@ const searchUser2 = async(req,res)=>{
     res.json({data:data})
 }
 
-const createuser = async(req, res) =>{
-
-    try{
-    console.log("req body : ",req.body);
-    const createuser = await userModel.insertOne(req.body)
-    res.json({message:"created user"})
-    }
-    catch(err){
-        res.json({err:err})
-    }
-}
+const createuser = async (req, res) => {
+  try {
+    const savedUser = await userModel.insertOne(req.body);
+    await mailSend(req.body.email,"mail test",
+        `
+  <html>
+    <body style="font-family:Arial; background:#f4f4f4; padding:30px;">
+      <div style="background:white; padding:25px; text-align:center;">
+        <h1 style="color:#2563eb;">Welcome 👋</h1>
+        <h2>Hello ${req.body.name || "User"}!</h2>
+        <p>Your account has been created successfully.</p>
+        <p><strong>Email:</strong> ${req.body.email}</p>
+        <a href="https://example.com"
+           style="background:#2563eb; color:white; padding:10px 20px; text-decoration:none;">
+          Visit Website
+        </a>
+      </div>
+    </body>
+  </html>
+  `
+    );
+    await mailSend(
+    req.body.email,
+    "GitHub Image",
+    `
+    <html>
+      <body>
+        <h1>Hello ${req.body.name}</h1>
+        <p>Here is your GitHub image.</p>
+      </body>
+    </html>
+    `
+);
+    res.json({
+      message: "user saved!!",
+      data: savedUser,
+    });
+  } catch (err) {
+    res.json({ err: err });
+  }
+};
 
 const deleteUser = async(req,res) =>{
     try{

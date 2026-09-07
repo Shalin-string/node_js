@@ -1,7 +1,7 @@
 const mailer = require("nodemailer")
-require("dotnev").config()
+require("dotenv").config()
 
-const mailSend = async(to,subject,text)=>{
+const mailSend = async(to,subject,html)=>{
 
     const transport = mailer.createTransport({
         service:"gmail",
@@ -14,7 +14,13 @@ const mailSend = async(to,subject,text)=>{
         from:process.env.EMAIL,
         to:to,
         subject:subject,
-        text:text
+        html:html,
+        attachments: [
+        {
+            filename: "gitimg.png",
+            path: "./images/gitimg.png"
+        }
+    ]
     }
     const mailresponse = await transport.sendMail(mailOptions)
     console.log(mailresponse)

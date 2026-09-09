@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { number } = require("zod")
 
 const UserModel = mongoose.Schema({
     name:{
@@ -6,6 +7,9 @@ const UserModel = mongoose.Schema({
     },
     age:{
         type:Number
+    },
+    number:{
+        type:number
     },
     bloodgroup:{
         type:String,

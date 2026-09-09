@@ -32,7 +32,11 @@ const UserModel = mongoose.Schema({
     },
     profilepic:{
         type:String
-    }
+    },
+    profileThumnails:[{
+        type:String
+        }
+    ]
 })
 
 module.exports = mongoose.model("users",UserModel)

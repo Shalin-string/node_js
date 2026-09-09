@@ -12,7 +12,7 @@ router.get("/search2",userController.searchUser2)
 
 // router.post("/user",testmiddleware("admin"),userController.createuser)
 // router.post("/user",zodmiddleware(uservalidationschema),userController.createuser)
-router.post("/user",upload.single("file"),userController.createuser)
+router.post("/user",upload.array("file",4),userController.createuser)
 router.delete("/user/:id",userController.deleteUser)
 router.put("/user/:id",userController.updateuser)
 router.put("/userbyage/:age",userController.updatebyage)

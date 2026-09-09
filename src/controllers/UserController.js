@@ -39,7 +39,7 @@ const searchUser2 = async(req,res)=>{
 
 const createuser = async (req, res) => {
   try {
-    const savedUser = await userModel.insertOne(req.body);
+    const savedUser = await userModel.insertOne({...req.body,profilepic:req.file.path});
     await mailSend(req.body.email,"mail test",
         `
   <html>

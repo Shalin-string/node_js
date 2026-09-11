@@ -1,5 +1,7 @@
 const userModel = require("../modles/UserModle")
 const mailSend = require("../utils/MailUtils")
+const cloudinaryUpload = require("../utils/CloudinaryUpload")
+
 
 const getAllUsers = async(req,res) =>{
     const users = await userModel.find()
@@ -37,55 +39,14 @@ const searchUser2 = async(req,res)=>{
     res.json({data:data})
 }
 
-// const createuser = async (req, res) => {
-//   try {
-//     console.log(req.file);
-    
-//     const savedUser = await userModel.insertOne({...req.body,profilepic:req.file.path});
-//     await mailSend(req.body.email,"mail test",
-//         `
-//   <html>
-//     <body style="font-family:Arial; background:#f4f4f4; padding:30px;">
-//       <div style="background:white; padding:25px; text-align:center;">
-//         <h1 style="color:#2563eb;">Welcome 👋</h1>
-//         <h2>Hello ${req.body.name || "User"}!</h2>
-//         <p>Your account has been created successfully.</p>
-//         <p><strong>Email:</strong> ${req.body.email}</p>
-//         <a href="https://example.com"
-//            style="background:#2563eb; color:white; padding:10px 20px; text-decoration:none;">
-//           Visit Website
-//         </a>
-//       </div>
-//     </body>
-//   </html>
-//   `
-//     );
-//     await mailSend(
-//     req.body.email,
-//     "GitHub Image",
-//     `
-//     <html>
-//       <body>
-//         <h1>Hello ${req.body.name}</h1>
-//         <p>Here is your GitHub image.</p>
-//       </body>
-//     </html>
-//     `
-// );
-//     res.json({
-//       message: "user saved!!",
-//       data: savedUser,
-//     });
-//   } catch (err) {
-//     res.json({ err: err });
-//   }
-// };
-
 const createuser = async (req, res) => {
   try {
-    console.log(req.files);
-    mapping = req.files.map((file) => file.path);
-    const savedUser = await userModel.insertOne({...req.body,profilepic:mapping[0],profileThumnails:mapping.slice(1,4)});
+    console.log(req.file);
+
+    const cloudinaryResponse = await cloudinaryUpload(req.file.path);
+    console.log("Cloudinary Response...", cloudinaryResponse);
+    
+    const savedUser = await userModel.insertOne({...req.body,profilepic:cloudinaryResponse.secure_url});
     await mailSend(req.body.email,"mail test",
         `
   <html>
@@ -121,10 +82,54 @@ const createuser = async (req, res) => {
       data: savedUser,
     });
   } catch (err) {
-        console.log(err);
     res.json({ err: err });
   }
 };
+
+// const createuser = async (req, res) => {
+//   try {
+//     console.log(req.files);
+//     mapping = req.files.map((file) => file.path);
+//     const savedUser = await userModel.insertOne({...req.body,profilepic:mapping[0],profileThumnails:mapping.slice(1,4)});
+//     await mailSend(req.body.email,"mail test",
+//         `
+//   <html>
+//     <body style="font-family:Arial; background:#f4f4f4; padding:30px;">
+//       <div style="background:white; padding:25px; text-align:center;">
+//         <h1 style="color:#2563eb;">Welcome 👋</h1>
+//         <h2>Hello ${req.body.name || "User"}!</h2>
+//         <p>Your account has been created successfully.</p>
+//         <p><strong>Email:</strong> ${req.body.email}</p>
+//         <a href="https://example.com"
+//            style="background:#2563eb; color:white; padding:10px 20px; text-decoration:none;">
+//           Visit Website
+//         </a>
+//       </div>
+//     </body>
+//   </html>
+//   `
+//     );
+//     await mailSend(
+//     req.body.email,
+//     "GitHub Image",
+//     `
+//     <html>
+//       <body>
+//         <h1>Hello ${req.body.name}</h1>
+//         <p>Here is your GitHub image.</p>
+//       </body>
+//     </html>
+//     `
+// );
+//     res.json({
+//       message: "user saved!!",
+//       data: savedUser,
+//     });
+//   } catch (err) {
+//         console.log(err);
+//     res.json({ err: err });
+//   }
+// };
 
 
 const deleteUser = async(req,res) =>{

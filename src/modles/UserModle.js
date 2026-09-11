@@ -27,8 +27,8 @@ const UserModel = mongoose.Schema({
         unique:true
     },
     password:{
-        type:String,
-        required:true
+        type:String
+        
     },
     profilepic:{
         type:String

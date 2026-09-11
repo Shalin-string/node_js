@@ -249,22 +249,36 @@ const updateusingid = async(req,res) => {
 const createMultipuleusers = async(req,res)=>{
 
     try{
-        // print data in console from xlsx file
-
         const workbook = xlsx.readFile(req.file.path);
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const data = xlsx.utils.sheet_to_json(worksheet);
+
+        const new_users = data.map((user) => ({
+            name: user.name,
+            age: user.age,
+            number: user.number,
+            bloodgroup: user.bloodgroup,
+            skills: user.skills ? user.skills.split(",") : [],
+            address: user.address ? JSON.parse(user.address) : {},
+            email: user.email,
+            password: user.password
+        }));
+
+        await userModel.insertMany(new_users);
         console.log(data);
 
         res.status(200).json({
-            message: "Multiple users created",
-            data: savedUsers
+             message: "Multiple users created",
+           // data: savedUsers
         });
     }
     catch(err){
+        console.log(err);
+        
         res.status(500).json({
-            message:"error while updating using url data",
+            
+            message:"error ",
             err:err
         })
     }

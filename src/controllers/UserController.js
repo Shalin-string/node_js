@@ -1,6 +1,8 @@
 const userModel = require("../modles/UserModle")
 const mailSend = require("../utils/MailUtils")
 const cloudinaryUpload = require("../utils/CloudinaryUpload")
+// const { response } = require("express")
+const xlsx = require("xlsx")
 
 
 const getAllUsers = async(req,res) =>{
@@ -43,11 +45,13 @@ const createuser = async (req, res) => {
   try {
     console.log(req.file);
 
-    const cloudinaryResponse = await cloudinaryUpload(req.file.path);
-    console.log("Cloudinary Response...", cloudinaryResponse);
-    
-    const savedUser = await userModel.insertOne({...req.body,profilepic:cloudinaryResponse.secure_url});
-    await mailSend(req.body.email,"mail test",
+    const cloudinaryResponse = await Promise.all(
+        req.files.map((file)=> cloudinaryUpload(file.path))
+    );
+
+    const urls = cloudinaryResponse.map((url)=>url.secure_url)
+    const savedUser = await userModel.insertOne({...req.body,profilepic:urls[0]});
+     await mailSend(req.body.email,"mail test",
         `
   <html>
     <body style="font-family:Arial; background:#f4f4f4; padding:30px;">
@@ -82,6 +86,8 @@ const createuser = async (req, res) => {
       data: savedUser,
     });
   } catch (err) {
+    console.log(err);
+    
     res.json({ err: err });
   }
 };
@@ -240,7 +246,31 @@ const updateusingid = async(req,res) => {
     }
 }
 
+const createMultipuleusers = async(req,res)=>{
+
+    try{
+        // print data in console from xlsx file
+
+        const workbook = xlsx.readFile(req.file.path);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const data = xlsx.utils.sheet_to_json(worksheet);
+        console.log(data);
+
+        res.status(200).json({
+            message: "Multiple users created",
+            data: savedUsers
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            message:"error while updating using url data",
+            err:err
+        })
+    }
+}
+
 module.exports ={
     getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser, updatebyage,
-    updateusingid
+    updateusingid, createMultipuleusers
 }

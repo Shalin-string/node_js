@@ -22,6 +22,9 @@ app.use("/catagory",catagoryRoute)
 const productRoutes = require("./src/routes/ProductRoutes")
 app.use("/product",productRoutes)
 
+const bookRoutes = require("./src/routes/BookRoutes")
+app.use("/book",bookRoutes)
+
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

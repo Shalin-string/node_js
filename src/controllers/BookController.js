@@ -5,7 +5,6 @@ const cloudinaryUpload = require("../utils/CloudinaryUpload");
 
 const AddBook = async (req, res) => {
     try {
-
         const book = new BooksModel({
             name: req.body.name,
             description: req.body.description

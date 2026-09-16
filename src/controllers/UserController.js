@@ -3,6 +3,7 @@ const mailSend = require("../utils/MailUtils")
 const cloudinaryUpload = require("../utils/CloudinaryUpload")
 // const { response } = require("express")
 const xlsx = require("xlsx")
+const bcrypt = require("bcrypt")
 
 
 const getAllUsers = async(req,res) =>{
@@ -49,8 +50,10 @@ const createuser = async (req, res) => {
         req.files.map((file)=> cloudinaryUpload(file.path))
     );
 
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+
     const urls = cloudinaryResponse.map((url)=>url.secure_url)
-    const savedUser = await userModel.insertOne({...req.body,profilepic:urls[0]});
+    const savedUser = await userModel.insertOne({...req.body,profilepic:urls[0],password:hashedPassword});
      await mailSend(req.body.email,"mail test",
         `
   <html>

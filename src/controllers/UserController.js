@@ -287,7 +287,41 @@ const createMultipuleusers = async(req,res)=>{
     }
 }
 
+const LoginUser = async(req,res) => {
+    try{
+    const foundUserFromemail = await userModel.findOne({email:req.body.email})
+    if(foundUserFromemail){
+        if(bcrypt.compareSync(req.body.password,foundUserFromemail.password)){
+            res.json({
+            message: "user logged in!!"
+            
+        });
+        }
+        else{
+            res.json({
+            message: "user faild to save !!",
+            });
+        }
+    }
+    else{
+         res.json({
+            message: "email not found !!"
+        })
+    }
+    }
+
+
+    catch(err){
+        console.log(err);
+        
+        res.status(500).json({
+            message:"err",
+            err:err
+        })
+    }
+}
+
 module.exports ={
     getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser, updatebyage,
-    updateusingid, createMultipuleusers
+    updateusingid, createMultipuleusers, LoginUser
 }

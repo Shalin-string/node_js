@@ -4,6 +4,8 @@ const cloudinaryUpload = require("../utils/CloudinaryUpload")
 // const { response } = require("express")
 const xlsx = require("xlsx")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const secret = "royal"
 
 
 const getAllUsers = async(req,res) =>{
@@ -292,8 +294,11 @@ const LoginUser = async(req,res) => {
     const foundUserFromemail = await userModel.findOne({email:req.body.email})
     if(foundUserFromemail){
         if(bcrypt.compareSync(req.body.password,foundUserFromemail.password)){
+
+            const token = jwt.sign(foundUserFromemail.toObject(),secret)
             res.json({
-            message: "user logged in!!"
+            message: "user logged in!!",
+            data:token
             
         });
         }

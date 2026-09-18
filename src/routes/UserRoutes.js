@@ -4,8 +4,10 @@ const testmiddleware = require("../middlewares/testMiddleware")
 const zodmiddleware = require("../middlewares/Zodmiddleware")
 const uservalidationschema = require("../validationSchemas/UserValidationSchemas")
 const upload = require("../middlewares/UploadMiddleware")
+const Authmiddleware = require("../middlewares/Authmiddleware")
 
-router.get("/users",userController.getAllUsers)
+
+router.get("/users",Authmiddleware,userController.getAllUsers)
 router.get("/user/:id",userController.getUserById)
 router.get("/search/:id",userController.searchByid)
 router.get("/search2",userController.searchUser2)
@@ -19,4 +21,5 @@ router.put("/userbyage/:age",userController.updatebyage)
 router.put("/updateuurl",userController.updateusingid)
 router.post("/multiuser",upload.single("file"),userController.createMultipuleusers)
 router.post("/LoginUser",userController.LoginUser)
+
 module.exports = router

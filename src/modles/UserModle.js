@@ -30,9 +30,14 @@ const UserModel = mongoose.Schema({
         type:String
         
     },
+    role_id:{
+        type:mongoose.Schema.ObjectId,
+        ref:"rolemodel"
+    },
     profilepic:{
         type:String
     },
+    
     profileThumnails:[{
         type:String
         }

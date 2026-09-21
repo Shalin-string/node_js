@@ -9,7 +9,7 @@ const secret = "royal"
 
 
 const getAllUsers = async(req,res) =>{
-    const users = await userModel.find()
+    const users = await userModel.find().populate("role_id")
     res.json({message:"Get all users...",data:users})
 }
 

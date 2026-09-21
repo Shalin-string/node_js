@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken")
 const secret = "royal"
+const usermodel = require("../modles/UserModle")
 
-const Authmiddleware = (req,res, next) =>{
+const Authmiddleware = async(req,res, next) =>{
     var token = req.headers.authorization
 
     if(token){
@@ -10,8 +11,17 @@ const Authmiddleware = (req,res, next) =>{
             token = token.split(" ")[1]
             
             try{
-                    jwt.verify(token,secret)
+                const decode =  jwt.verify(token,secret)
+                console.log(decode)
+                const varifiableUser = await usermodel.findById(decode.id)
+                if (varifiableUser) {
                     next()
+                }
+                else{
+                    res.status(401).json({
+                        message:"user in not varifiable"
+                    })
+                }
             }
             catch(err){
                     console.log(err);

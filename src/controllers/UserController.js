@@ -6,7 +6,7 @@ const xlsx = require("xlsx")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const secret = "royal"
-
+0
 
 const getAllUsers = async(req,res) =>{
     const users = await userModel.find()

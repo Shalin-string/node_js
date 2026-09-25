@@ -57,9 +57,9 @@ const Authmiddleware = (roles) => async(req,res,next)=>{
             token = token.split(" ")[1]
             try{
                 const decode = jwt.verify(token,secret)
-                console.log(decode)
+                console.log("decoded.....",decode)
                 const varifiableUser = await usermodel.findById(decode.id).populate("role_id")
-                console.log(varifiableUser)
+                console.log(".....................",varifiableUser)
                 if (varifiableUser && roles.includes(varifiableUser.role_id.name)) {
                     next()
                 } else {

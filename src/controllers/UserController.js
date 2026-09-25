@@ -333,33 +333,34 @@ const getaccesstoken = async(req,res) =>{
 
     try{
     
-        const refreshToken = await req.body.token
+        const refreshToken = await req.body.refreshtoken
         console.log(refreshToken)
         
         const userfound = await userModel.findOne({refreshToken:refreshToken})
         console.log(userfound)
                 
-        decoded = jwt.verify(refreshToken,secret)
-        
-        
-
-
-
+        if(userfound){
+            const token = jwt.sign({id:userfound._id},secret)
+            res.json({
+                message:"new access token generated",
+                data:token
+            })
+        }
+        else{
+            res.status(404).json({
+                message:"user not found"
+            })
+        }
     }
-
     catch(err){
-        res.json({
-            message:"faild in getaccesstoken api",
+        console.log(err);
+        res.status(500).json({
+            message:"error while generating new access token",
             err:err
         })
     }
 
 }
-
-
-
-
-
 
 
 module.exports ={

@@ -24,4 +24,6 @@ router.put("/updateuurl",userController.updateusingid)
 router.post("/multiuser",upload.single("file"),userController.createMultipuleusers)
 router.post("/LoginUser",userController.LoginUser)
 
+router.post("/getaccesstoken",userController.getaccesstoken)
+
 module.exports = router

@@ -41,7 +41,11 @@ const UserModel = mongoose.Schema({
     profileThumnails:[{
         type:String
         }
-    ]
+    ],
+
+    refreshToken:{
+        type:String
+    }
 })
 
 module.exports = mongoose.model("users1",UserModel)

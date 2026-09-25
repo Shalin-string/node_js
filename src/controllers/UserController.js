@@ -56,6 +56,8 @@ const createuser = async (req, res) => {
 
     const urls = cloudinaryResponse.map((url)=>url.secure_url)
     const savedUser = await userModel.insertOne({...req.body,profilepic:urls[0],password:hashedPassword});
+    const token = jwt.sign({id:savedUser._id},secret,{expiresIn:'6m'})
+    await userModel.findByIdAndUpdate(savedUser._id,{refreshToken:token})
      await mailSend(req.body.email,"mail test",
         `
   <html>
@@ -298,7 +300,8 @@ const LoginUser = async(req,res) => {
             const token = jwt.sign({id:foundUserFromemail._id},secret,{expiresIn:60})
             res.json({
             message: "user logged in!!",
-            data:token
+            data:token,
+            refreshtoken : foundUserFromemail.refreshToken
             
         });
         }
@@ -326,7 +329,40 @@ const LoginUser = async(req,res) => {
     }
 }
 
+const getaccesstoken = async(req,res) =>{
+
+    try{
+    
+        const refreshToken = await req.body.token
+        console.log(refreshToken)
+        
+        const userfound = await userModel.findOne({refreshToken:refreshToken})
+        console.log(userfound)
+                
+        decoded = jwt.verify(refreshToken,secret)
+        
+        
+
+
+
+    }
+
+    catch(err){
+        res.json({
+            message:"faild in getaccesstoken api",
+            err:err
+        })
+    }
+
+}
+
+
+
+
+
+
+
 module.exports ={
     getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser, updatebyage,
-    updateusingid, createMultipuleusers, LoginUser
+    updateusingid, createMultipuleusers, LoginUser, getaccesstoken
 }

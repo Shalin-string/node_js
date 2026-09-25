@@ -7,7 +7,9 @@ const upload = require("../middlewares/UploadMiddleware")
 const Authmiddleware = require("../middlewares/Authmiddleware")
 
 
-router.get("/users",Authmiddleware,userController.getAllUsers)
+// router.get("/users",Authmiddleware("MANAGER"),userController.getAllUsers)
+router.get("/users",Authmiddleware(["MANAGER","ADMIN","USER"]),userController.getAllUsers)
+
 router.get("/user/:id",userController.getUserById)
 router.get("/search/:id",userController.searchByid)
 router.get("/search2",userController.searchUser2)

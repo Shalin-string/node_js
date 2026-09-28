@@ -13,6 +13,10 @@ const redisConnection = new Redis(
   "redis://default:reDicq1gyjvZxZwdKafuBv5sypTVLviW@property-flight-neofast-41156.db.redis.io:19491",
 );
 
+redisConnection.on("connect",()=>{
+  console.log("redis connected!!")
+})
+
 
 
 const userRoutes = require("./src/routes/UserRoutes")

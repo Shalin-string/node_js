@@ -1,12 +1,10 @@
 const express = require("express");
 const app = express();
-
 app.use(express.json())
 require("dotenv").config()
-
 const getDBConnection = require("./src/utils/DBConnection")
 getDBConnection()
-
+const {Queue, delay} = require("bullmq")
 const Redis = require("ioredis")
 
 const redisConnection = new Redis(
@@ -17,6 +15,17 @@ redisConnection.on("connect",()=>{
   console.log("redis connected!!")
 })
 
+const myQueue = new Queue("taskQueue",{connection:redisConnection})
+
+app.post("/add-task",async(req,res)=>{
+  console.log("adding task to queue......")
+  const name = req.body.name
+  const email = req.body.email
+  await myQueue.add("task",{name,email},{delay:0})
+  res.json({
+    message:"task has been assigned"
+  })
+})
 
 
 const userRoutes = require("./src/routes/UserRoutes")

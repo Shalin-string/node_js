@@ -29,7 +29,6 @@ worker.on("completed", (job) => {
   console.log(`task done for ${job.id}`);
 });
 worker.on("failed", (job, err) => {
-    console.log(`task failed: ${job.id}`);
-    console.log("ERROR:", err);
+    
     console.log("ERROR MESSAGE:", err.message);
 });

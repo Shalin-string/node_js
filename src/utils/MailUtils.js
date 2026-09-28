@@ -1,8 +1,9 @@
 const mailer = require("nodemailer")
-require("dotenv").config()
+const path = require("path")
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
 const mailSend = async(to,subject,html)=>{
-
+    console.log("email---",process.env.EMAIL)
     const transport = mailer.createTransport({
         service:"gmail",
         auth:{
@@ -15,16 +16,20 @@ const mailSend = async(to,subject,html)=>{
         to:to,
         subject:subject,
         html:html,
-        attachments: [
-        {
-            filename: "gitimg.png",
-            path: "./images/gitimg.png"
-        }
-    ]
+    //     attachments: [
+    //     {
+    //         filename: "gitimg.png",
+    //         path: "./images/gitimg.png"
+    //     }
+    // ]
     }
+    try{
     const mailresponse = await transport.sendMail(mailOptions)
     console.log(mailresponse)
-
+    }
+    catch(err){
+    console.log("MAIL ERROR:", err);
+}
 }
 
 module.exports = mailSend

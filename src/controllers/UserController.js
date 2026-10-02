@@ -365,9 +365,10 @@ const getaccesstoken = async(req,res) =>{
 const forgotpassword = async(req,res) => {
     const email  = req.body.email
     const emailvari = await userModel.findOne({email:email})
+    
     try{
     if(emailvari){
-        const token = jwt.sign({id:emailvari._id},secret)
+        const token = jwt.sign({id:emailvari._id},secret,{expiresIn:'5m'})
         const url = `http://localhost:3000/user/resetpassword?token=${token}`
         await mailSend(email,"reset password",`url:${url}`)
         res.json({

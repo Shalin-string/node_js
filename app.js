@@ -10,6 +10,11 @@ const Redis = require("ioredis")
 const mailsend = require("./src/utils/MailUtils")
 const path = require("path")
 //require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+const usermodel = require("./src/modles/UserModle")
+const bcrypt = require("bcrypt")
+
+const cors = require("cors")
+app.use(cors())
 
 const redisConnection = new Redis(
   "redis://default:reDicq1gyjvZxZwdKafuBv5sypTVLviW@property-flight-neofast-41156.db.redis.io:19491",
@@ -83,6 +88,48 @@ app.post("/getotp",async(req,res)=>{
   }
 
 })
+
+
+
+app.post("/resetpassword",async(req,res)=>{
+    const otp = await redisConnection.get(`otp:${req.body.email}`);
+    const email = req.body.email
+    const newPassword = req.body.newPassword
+
+    try{
+
+    if(otp === req.body.otp){
+      const foundUser = await usermodel.findOne({email});
+      if(foundUser){
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const updatedUser = await usermodel.findOneAndUpdate({ email },{ password: hashedPassword })
+        res.json({
+          message:"password updated successfully",
+          updatedUser:updatedUser
+        })
+      }
+      else{
+        res.status(404).json({
+          message:"user not found"
+        })
+      }
+    }
+    else{
+      res.status(400).json({
+        message:"invalid otp"
+      })
+    }
+}
+catch(err){
+  console.log("error while resetting password",err);
+  res.status(500).json({
+    message:"error while resetting password",
+    err:err
+  })
+}
+})
+
+
 
 
 const userRoutes = require("./src/routes/UserRoutes")

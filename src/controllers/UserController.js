@@ -362,8 +362,67 @@ const getaccesstoken = async(req,res) =>{
 
 }
 
+const forgotpassword = async(req,res) => {
+    const email  = req.body.email
+    const emailvari = await userModel.findOne({email:email})
+    try{
+    if(emailvari){
+        const token = jwt.sign({id:emailvari._id},secret)
+        const url = `http://localhost:3000/user/resetpassword?token=${token}`
+        await mailSend(email,"reset password",`url:${url}`)
+        res.json({
+            message:"reset password link sent to email",
+            data:url
+        })
+    }
+    else{
+        res.status(404).json({
+            message:"email not found"
+        })
+    }}
+    catch(err){
+        console.log("error while sending reset password link",err);
+        res.status(500).json({
+            message:"error while sending reset password link",
+            err:err
+        })
+    }
+}
+
+const resetpassword = async(req,res) => {
+    const id = req.query.token
+    const decodeId = jwt.verify(id,secret)
+    const userId = decodeId.id
+    const newpass = req.body.newpass
+
+    try{
+
+    const foundUser = await userModel.findById(userId);
+    if(foundUser){
+        const hashedPassword = await bcrypt.hash(newpass, 10);
+        const updatedUser = await userModel.findOneAndUpdate({ _id: userId },{ password: hashedPassword })
+        res.json({
+          message:"password updated successfully",
+          updatedUser:updatedUser
+        })
+    }
+    else{
+        res.status(404).json({
+          message:"user not found"
+        })
+    }
+}
+    catch(err){
+        console.log("error while resetting password",err);
+        res.status(500).json({
+            message:"error while resetting password",
+            err:err
+        })
+    }
+}
+
 
 module.exports ={
     getAllUsers, getUserById,searchByid, searchUser2, createuser, deleteUser, updateuser, updatebyage,
-    updateusingid, createMultipuleusers, LoginUser, getaccesstoken
+    updateusingid, createMultipuleusers, LoginUser, getaccesstoken, forgotpassword, resetpassword
 }

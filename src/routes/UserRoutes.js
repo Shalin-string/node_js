@@ -26,4 +26,7 @@ router.post("/LoginUser",userController.LoginUser)
 
 router.post("/getaccesstoken",userController.getaccesstoken)
 
+router.post("/forgotpassword",userController.forgotpassword)
+router.post("/resetpassword",userController.resetpassword)
+
 module.exports = router
